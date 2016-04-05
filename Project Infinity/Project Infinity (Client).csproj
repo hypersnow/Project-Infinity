@@ -42,6 +42,7 @@
     <Compile Include="Camera2D.cs" />
     <Compile Include="Collision.cs" />
     <Compile Include="Infinity.cs" />
+    <Compile Include="Interval.cs" />
     <Compile Include="Level.cs" />
     <Compile Include="GameObject.cs" />
     <Compile Include="Player.cs" />

@@ -26,35 +26,64 @@ namespace Infinity
         protected Sprite sprite;
         protected Rectangle bounds;
         protected SpriteEffects spriteEffects;
+        protected float animSpeed;
+        private Interval animTimer;
 
         public GameObject(Vector2 position)
         {
             Position = position;
             Bounds = new Rectangle(0, 0, 0, 0);
             spriteEffects = SpriteEffects.None;
+            animSpeed = 0.1f;
+            animTimer = new Interval();
         }
 
         public GameObject(Sprite sprite, Vector2 position)
         {
+
             Position = new Vector2(0, 0);
             SetSprite(sprite);
             spriteEffects = SpriteEffects.None;
+            animSpeed = 1;
         }
 
         public void SetSprite(Sprite sprite)
         {
             this.sprite = sprite;
-            Bounds = sprite.Bounds;
+        }
+
+        public void SetSpriteResource(string name)
+        {
+            this.sprite = ResourceManager.GetSprite(name);
+        }
+
+        protected void Animate(GameTime gameTime)
+        {
+            animTimer.Update(gameTime);
+            if (sprite.MaxFrames > 1 && !animTimer.IsRunning)
+            {
+                if (animSpeed > 0)
+                    sprite.Frame++;
+                if (sprite.Frame >= sprite.MaxFrames)
+                    sprite.Frame = 0;
+                animTimer.Start(animSpeed);
+            }
+        }
+
+        protected void SetAnimSpeed(float seconds)
+        {
+            animSpeed = seconds;
         }
 
         public virtual void Update(GameTime gameTime, KeyboardState keyState, List<GameObject> gameObjects) 
         {
             Position += Motion * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            Animate(gameTime);
         }
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(sprite.Texture, Position, null, Color.White, 0f, new Vector2(0f, 0f), new Vector2(1f, 1f), spriteEffects, 0f);
+            spriteBatch.Draw(sprite.Texture, Position, new Rectangle((sprite.Frame + sprite.AnimBegin) * sprite.SourceWidth, 0, sprite.SourceWidth, sprite.Texture.Height), Color.White, 0f, new Vector2(0f, 0f), new Vector2(1f, 1f), spriteEffects, 0f);
         }
     }
 }

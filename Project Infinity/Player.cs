@@ -18,7 +18,7 @@ namespace Infinity
 
         public Player(Vector2 position) : base(position)
         {
-            SetSprite(ResourceManager.GetSprite("player"));
+            SetSpriteResource("player");
             Bounds = new Rectangle(12, 0, 8, 32);
             isGravity = true;
             speed = 500f;
@@ -47,6 +47,7 @@ namespace Infinity
                     DX += speed * time;
                     spriteEffects = SpriteEffects.None;
                 }
+                SetSpriteResource("player_run");
             }
             else 
             {
@@ -56,11 +57,15 @@ namespace Infinity
                     DX += slow * time;
                 if (Math.Abs(DX) < 10)
                     DX = 0;
+                SetSpriteResource("player");
             }
             if (DX > maxSpeed)
                 DX = maxSpeed;
             else if (DX < -maxSpeed)
                 DX = -maxSpeed;
+
+            if (!onFloor)
+                SetSpriteResource("player_jump");
 
             if (keyState.IsKeyDown(Keys.W) && onFloor)
             {
@@ -80,6 +85,8 @@ namespace Infinity
                 if (DY > Math.Abs(maxGravity))
                     DY = maxGravity;
             }
+
+            Animate(gameTime);
         }
 
         private void CheckCollisions(float time, List<GameObject> gameObjects)

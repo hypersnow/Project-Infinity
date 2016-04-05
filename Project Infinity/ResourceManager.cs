@@ -23,7 +23,9 @@ namespace Infinity
 
         public void LoadResources(ContentManager content)
         {
-            sprites.Add("player", new Sprite(content.Load<Texture2D>("char")));
+            sprites.Add("player", new Sprite(content.Load<Texture2D>("char"), 1, 32));
+            sprites.Add("player_run", new Sprite(content.Load<Texture2D>("char"), 2, 32));
+            sprites.Add("player_jump", new Sprite(content.Load<Texture2D>("char"), 1, 32, 2));
             sprites.Add("grid", new Sprite(content.Load<Texture2D>("grid")));
             sprites.Add("block", new Sprite(content.Load<Texture2D>("block")));
             sprites.Add("dot", new Sprite(content.Load<Texture2D>("dot")));
