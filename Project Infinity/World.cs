@@ -28,15 +28,8 @@ namespace Infinity
             BGColor = Color.White;
             background = ResourceManager.GetSprite("grid");
             bgType = (int)BGTypes.Repeating;
-            gameObjects = new List<GameObject>();
+            gameObjects = Level.LoadLevel(@"level.json");
             player = new Player(new Vector2(0, 64));
-            AddBlock((int)BlockSizes.Normal, new Vector2(0, 128));
-            AddBlock((int)BlockSizes.Normal, new Vector2(32, 128));
-            AddBlock((int)BlockSizes.Normal, new Vector2(64, 128));
-            AddBlock((int)BlockSizes.Normal, new Vector2(96, 128));
-            AddBlock((int)BlockSizes.Normal, new Vector2(128, 128));
-            AddBlock((int)BlockSizes.Normal, new Vector2(128, 96));
-            AddBlock((int)BlockSizes.Normal, new Vector2(64, 64));
             AddObject(player);
         }
 
@@ -62,7 +55,16 @@ namespace Infinity
                     }
                 }
                 if (!exists)
+                {
                     AddBlock((int)BlockSizes.Normal, addPos);
+                    List<Block> blocks = new List<Block>();
+                    foreach (GameObject gameObject in gameObjects)
+                    {
+                        if (gameObject is Block)
+                            blocks.Add((Block)gameObject);
+                    }
+                    Level.SaveLevel(blocks);
+                }
             }
             else if (mouseState.RightButton == ButtonState.Pressed)
             {
